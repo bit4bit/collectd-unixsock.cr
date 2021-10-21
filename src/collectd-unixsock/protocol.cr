@@ -1,22 +1,5 @@
-module Collectd::Unixsock
-  class Protocol
-    # https://collectd.org/documentation/manpages/collectd-unixsock.5.shtml#putval_identifier_optionlist_valuelist
-    def putval(identifier_name : String, values : ValueList, options = OptionList.new)
-      String.build do |str|
-        str << "PUTVAL "
-        str << encode_identifier(Identifier.from_string(identifier_name))
-
-        options_encoded = encode_options(options)
-        if options_encoded != ""
-          str << " "
-          str << options_encoded
-        end
-
-        str << " "
-        str << encode_values(values)
-      end
-    end
-
+module Collectd::Unixsock::Protocol
+  module Marshal
     private def encode_options(options : OptionList)
       options.map { |k, v|
         if "#{v}".includes?(' ')
@@ -38,6 +21,34 @@ module Collectd::Unixsock
       else
         out
       end
+    end
+  end
+
+  class PUTVAL
+    extend Marshal
+
+    # https://collectd.org/documentation/manpages/collectd-unixsock.5.shtml#putval_identifier_optionlist_valuelist
+    def self.command(identifier_name : String, values : ValueList, options = OptionList.new)
+      String.build do |str|
+        str << "PUTVAL "
+        str << encode_identifier(Identifier.from_string(identifier_name))
+
+        options_encoded = encode_options(options)
+        if options_encoded != ""
+          str << " "
+          str << options_encoded
+        end
+
+        str << " "
+        str << encode_values(values)
+      end
+    end
+
+    alias Answer = {Int32, String}
+
+    def self.answer(line : String)
+      status, message = line.split(' ', 2)
+      {status.to_i32, message}
     end
   end
 end

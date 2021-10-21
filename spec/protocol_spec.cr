@@ -3,9 +3,7 @@ require "./spec_helper"
 describe Collectd::Unixsock::Protocol do
 
   it "encode putval" do
-    protocol = Collectd::Unixsock::Protocol.new
-
-    encoded = protocol.putval(
+    encoded = Collectd::Unixsock::Protocol::PUTVAL.command(
       "testhost/interface/if_octets-test0",
       [1179574444,123,456],
       {"interval" => 10}
@@ -15,9 +13,7 @@ describe Collectd::Unixsock::Protocol do
   end
 
   it "encode putval quote option value with space" do
-    protocol = Collectd::Unixsock::Protocol.new
-
-    encoded = protocol.putval(
+    encoded = Collectd::Unixsock::Protocol::PUTVAL.command(
       "testhost/interface/if_octets-test0",
       [1179574444,123,456],
       {"interval" => 10, "test" => "has space"},
@@ -27,14 +23,19 @@ describe Collectd::Unixsock::Protocol do
   end
 
   it "encode putval quote identifier with space" do
-    protocol = Collectd::Unixsock::Protocol.new
-
-    encoded = protocol.putval(
+    encoded = Collectd::Unixsock::Protocol::PUTVAL.command(
       "testhost/interface/if_octets test0",
       [1179574444,123,456],
       {"interval" => 10, "test" => "has space"},
     )
 
     encoded.should eq "PUTVAL \"testhost/interface/if_octets test0\" interval=10 test=\"has space\" 1179574444:123:456"
+  end
+
+  it "parse answer" do
+    status, message = Collectd::Unixsock::Protocol::PUTVAL.answer("0 Success")
+
+    status.should eq 0
+    message.should eq "Success"
   end
 end
