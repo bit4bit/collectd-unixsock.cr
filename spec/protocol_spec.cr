@@ -12,6 +12,26 @@ describe Collectd::Unixsock::Protocol do
     encoded.should eq "PUTVAL testhost/interface/if_octets-test0 interval=10 1179574444:123:456"
   end
 
+  it "encode putval undefined" do
+    encoded = Collectd::Unixsock::Protocol::PUTVAL.command(
+      "testhost/interface/if_octets-test0",
+      [Collectd::Unixsock::ValueListOption::Undefined, 3],
+      {"interval" => 10}
+    )
+
+    encoded.should eq "PUTVAL testhost/interface/if_octets-test0 interval=10 U:3"
+  end
+
+  it "encode putval current time" do
+    encoded = Collectd::Unixsock::Protocol::PUTVAL.command(
+      "testhost/interface/if_octets-test0",
+      [Collectd::Unixsock::ValueListOption::CurrentTime, 3],
+      {"interval" => 10}
+    )
+
+    encoded.should eq "PUTVAL testhost/interface/if_octets-test0 interval=10 N:3"
+  end
+
   it "encode putval quote option value with space" do
     encoded = Collectd::Unixsock::Protocol::PUTVAL.command(
       "testhost/interface/if_octets-test0",

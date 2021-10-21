@@ -11,7 +11,16 @@ module Collectd::Unixsock::Protocol
     end
 
     private def encode_values(values : ValueList)
-      values.join(":")
+      values.map do |value|
+        case value
+        when Collectd::Unixsock::ValueListOption::Undefined
+          "U"
+        when Collectd::Unixsock::ValueListOption::CurrentTime
+          "N"
+        else
+          value
+        end
+      end.join(":")
     end
 
     private def encode_identifier(identifier : Identifier)
