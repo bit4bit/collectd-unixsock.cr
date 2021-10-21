@@ -19,16 +19,6 @@ describe Collectd::Unixsock::Identifier do
     ident.type.should eq "load 1"
   end
 
-  it "encode identifier" do
-    ident = Collectd::Unixsock::Identifier.from_string("localhost/test/load")
-    "localhost/test/load".should eq ident.to_s
-  end
-
-  it "quote when identifier have spaces" do
-    ident = Collectd::Unixsock::Identifier.from_string("localhost/test/load 1")
-    "\"localhost/test/load 1\"".should eq ident.to_s
-  end
-
   it "fail with invalid identifier" do
     expect_raises(Collectd::Unixsock::Identifier::Error) do
       Collectd::Unixsock::Identifier.from_string("localhost/test|load")
