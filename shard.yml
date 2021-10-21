@@ -1,0 +1,12 @@
+name: collectd-unixsock
+version: 0.1.0
+
+authors:
+  - Jovany Leandro G.C <bit4bit@riseup.net>
+
+description: |
+  Work with collectd-unixsock
+
+crystal: 1.2.1
+
+license: MIT
