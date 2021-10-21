@@ -1,6 +1,13 @@
 # collectd-unixsock
 
-TODO: Write a description here
+
+## TODO
+
+- [X] PUTVAL
+- [ ] GETVAL
+- [ ] LISTVAL
+- [ ] PUTNOTIF
+- [ ] FLUSH
 
 ## Installation
 
@@ -9,7 +16,7 @@ TODO: Write a description here
    ```yaml
    dependencies:
      collectd-unixsock:
-       github: bit4bit/collectd-unixsock
+       github: bit4bit/collectd-unixsock.cr
    ```
 
 2. Run `shards install`
@@ -18,6 +25,12 @@ TODO: Write a description here
 
 ```crystal
 require "collectd-unixsock"
+
+collectd = Collectd::Unixsock.open(socket_path)
+status, message = collectd.putval("testval/cpu-0/cpu-idle",
+  [Collectd::Unixsock::ValueListOption::CurrentTime, 2323])
+  
+collectd.close()
 ```
 
 TODO: Write usage instructions here

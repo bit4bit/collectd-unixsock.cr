@@ -55,7 +55,7 @@ module Collectd::Unixsock::Protocol
 
     alias Answer = {Int32, String}
 
-    def self.answer(line : String)
+    def self.answer(line : String) : Answer
       status, message = line.split(' ', 2)
       {status.to_i32, message}
     end
