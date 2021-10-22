@@ -37,7 +37,10 @@ TODO: Write usage instructions here
 
 ## Development
 
-TODO: Write development instructions here
+1. See **Contributing**
+2. Start docker environment with **make docker-setup**
+3. Do changes and test with **make test**
+3. Do changes and test with **make test-integration**
 
 ## Contributing
 
