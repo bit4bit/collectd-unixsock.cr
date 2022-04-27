@@ -2,6 +2,15 @@ require "./spec_helper"
 
 describe Collectd::Unixsock::Protocol do
 
+  it "encode putval single" do
+    encoded = Collectd::Unixsock::Protocol::PUTVAL.command(
+      "testhost/interface/if_octets-test0",
+      [456]
+    )
+
+    encoded.should eq "PUTVAL testhost/interface/if_octets-test0 456"
+  end
+
   it "encode putval" do
     encoded = Collectd::Unixsock::Protocol::PUTVAL.command(
       "testhost/interface/if_octets-test0",
